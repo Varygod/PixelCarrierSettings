@@ -31,18 +31,31 @@ From "Config overrides" menu, you can override carrier configurations (the same 
 
 If you need manual/custom overrides, please check out [Pixel IMS](https://github.com/kyujin-cho/pixel-volte-patch).
 ### How to set up a development environment
-step 1.
-./build.sh
-step 2. 
+
+
+**step 1**
+   
+```shell
+ ./build.sh
+```
+
+**step 2** 
+```shell
 docker exec -it andriod_complier /bin/bash 
-step 3. 
-/workspace/PixelCarrierSettings
-step 4.
+```
+**step 3** 
+```shell
+cd /workspace/PixelCarrierSettings
+```
+**step 4**
+```shell
 ./gradlew clean
 ./gradlew assemble
-step 5. 
+```
+**step 5**
+```shell
  ./sign_and_install.sh PixelCarrierSettings/app/build/outputs/apk/release/app-release-unsigned.apk
- 
+ ```
 
 ## References
 
