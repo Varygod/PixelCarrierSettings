@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.os.PersistableBundle
 import android.os.ServiceManager
 import android.telephony.CarrierConfigManager
+import android.telephony.TelephonyManager
 import android.view.MenuItem
 import android.widget.Toast
 import me.ikirby.pixelutils.databinding.ActivityConfigOverridesBinding
@@ -35,8 +36,9 @@ class ConfigOverridesActivity : Activity() {
         binding.btnOverrideNRMode.setOnClickListener { overrideNRMode() }
         binding.btnOverrideWFC.setOnClickListener { overrideWFC() }
         binding.btnOverride5GSignalThreshold.setOnClickListener { override5GSignalThreshold() }
+        binding.btnOverrideCarrier.setOnClickListener { overrideCarrier() }
+        binding.btnVerifyCarrier.setOnClickListener { verifyCarrier() }
         binding.btnResetConfig.setOnClickListener { resetConfig() }
-        binding.btnSignalInflate.setOnClickListener { overrideSignalInflate() }
     }
 
     override fun onMenuItemSelected(featureId: Int, item: MenuItem): Boolean {
@@ -46,6 +48,10 @@ class ConfigOverridesActivity : Activity() {
 
     private fun showToast(resId: Int) {
         Toast.makeText(this, resId, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
     }
 
     private fun overrideConfig(overrides: PersistableBundle?) {
@@ -125,10 +131,42 @@ class ConfigOverridesActivity : Activity() {
         }
         overrideConfig(overrides)
     }
-    private fun overrideSignalInflate() {
+
+    private fun overrideCarrier() {
         val overrides = PersistableBundle().apply {
-            putBoolean(CarrierConfigManager.KEY_INFLATE_SIGNAL_STRENGTH_BOOL, false)
+            // Set country ISO to "us"
+            putString(CarrierConfigManager.KEY_SIM_COUNTRY_ISO_OVERRIDE_STRING, "us")
+            // Enable carrier name override
+            putBoolean(CarrierConfigManager.KEY_CARRIER_NAME_OVERRIDE_BOOL, true)
+            // Set carrier name to "Verizon"
+            putString(CarrierConfigManager.KEY_CARRIER_NAME_STRING, "Verizon")
         }
         overrideConfig(overrides)
+    }
+
+    private fun verifyCarrier() {
+        val ccm = getSystemService(CarrierConfigManager::class.java)
+        val config = ccm.getConfigForSubId(subId)
+
+        val countryIso = config?.getString(CarrierConfigManager.KEY_SIM_COUNTRY_ISO_OVERRIDE_STRING)
+        val carrierNameOverride = config?.getBoolean(CarrierConfigManager.KEY_CARRIER_NAME_OVERRIDE_BOOL)
+        val carrierName = config?.getString(CarrierConfigManager.KEY_CARRIER_NAME_STRING)
+
+        val tm = getSystemService(TelephonyManager::class.java)
+        val currentCountryIso = tm.getSimCountryIso()
+        val currentCarrierName = tm.getSimOperatorName()
+
+        val message = """
+            Carrier Config:
+            Country ISO Override: $countryIso
+            Carrier Name Override Enabled: $carrierNameOverride
+            Carrier Name Override: $carrierName
+
+            Current System Values:
+            Current Country ISO: $currentCountryIso
+            Current Carrier Name: $currentCarrierName
+        """.trimIndent()
+
+        showToast(message)
     }
 }
