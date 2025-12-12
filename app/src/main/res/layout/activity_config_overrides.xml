@@ -55,10 +55,17 @@
             android:textAllCaps="false" />
 
         <Button
-            android:id="@+id/btnSignalInflate"
+            android:id="@+id/btnOverrideCarrier"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/signal_inflate"
+            android:text="@string/override_carrier"
+            android:textAllCaps="false" />
+
+        <Button
+            android:id="@+id/btnVerifyCarrier"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Verify Current Carrier Settings"
             android:textAllCaps="false" />
 
         <Button
