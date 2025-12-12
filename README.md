@@ -30,6 +30,19 @@ From "Config overrides" menu, you can override carrier configurations (the same 
 - **Override 5G signal threshold**: Sets `KEY_5G_NR_SSRSRP_THRESHOLDS_INT_ARRAY` to `[-115, -105, -95, -85]`. This option exists because with AOSP's default values I only get 1 bar 5G signal in my area, but on other devices the signal are full or at least 2 bars (dBm values are the same).
 
 If you need manual/custom overrides, please check out [Pixel IMS](https://github.com/kyujin-cho/pixel-volte-patch).
+### How to set up a development environment
+step 1.
+./build.sh
+step 2. 
+docker exec -it andriod_complier /bin/bash 
+step 3. 
+/workspace/PixelCarrierSettings
+step 4.
+./gradlew clean
+./gradlew assemble
+step 5. 
+ ./sign_and_install.sh PixelCarrierSettings/app/build/outputs/apk/release/app-release-unsigned.apk
+ 
 
 ## References
 
